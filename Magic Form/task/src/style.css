@@ -1,0 +1,64 @@
+main {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+}
+
+form {
+    min-width: 100%;
+    max-width: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+    flex-flow: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+form label {
+    margin: 1em 0 0.5em 0.3em;
+    width: 100%;
+}
+
+form input {
+    display: block;
+    outline: none;
+    width: 100%;
+    height: 2em;
+    padding: 0.5em;
+    border: 1px solid black;
+    border-radius: 5px;
+    background: transparent;
+}
+
+form input:focus {
+    border: 1px solid #212529;
+    border-radius: 5px;
+    background: transparent;
+}
+
+form input:focus::placeholder{
+    color: transparent;
+}
+form button {
+    font-size: 1em;
+    align-self: center;
+    margin: 1em;
+    padding: 0.4em 0.8em;
+    border: 2px solid black;
+    border-radius: 5px;
+    background: black;
+}
+
+form button:hover {
+    font-size: 1em;
+    align-self: center;
+    margin: 1em;
+    padding: 0.4em 0.8em;
+    border: 2px inset black;
+    border-radius: 5px;
+    background: #212529;
+}
+
