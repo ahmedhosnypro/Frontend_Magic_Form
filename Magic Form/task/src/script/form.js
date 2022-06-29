@@ -4,23 +4,41 @@ const inputEmail = document.getElementById('email');
 const inputPhone = document.getElementById('phone');
 const inputCompany = document.getElementById('company');
 const inputAddress = document.getElementById('address');
+let submitButton = document.getElementById('submit-button');
 const inputFields = [inputFirstName, inputLastName, inputEmail, inputPhone, inputCompany, inputAddress];
 
 let formInputs = {};
 
+submitButton.addEventListener('click', () => {
+    for (const field of inputFields) {
+        formInputs[field.name] = field.value;
+    }
+    let submits = JSON.parse(localStorage.getItem('submissions')) || [];
+    submits[submits.length] = formInputs;
+    localStorage.setItem('submissions', JSON.stringify(submits));
+
+    for (const field of inputFields) {
+        field.value = "";
+    }
+    localStorage.setItem('formCash', JSON.stringify({}));
+})
+
 for (const field of inputFields) {
     field.addEventListener('input', () => {
-        localStorage.setItem(field.name, field.value)
+        let formCash = JSON.parse(localStorage.getItem('formCash')) || {};
+        formCash[field.name] = field.value;
+        localStorage.setItem('formCash', JSON.stringify(formCash));
     });
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    for (let i = 0; i < localStorage.length; i++) {
-        let input = localStorage.key(i);
-        for (const field of inputFields) {
-            if (input === field.name) {
-                field.value = localStorage.getItem(input)
-            }
+    const formCash = JSON.parse(localStorage.getItem('formCash'));
+
+    for (const field of inputFields) {
+        const value = formCash[field.name];
+        if (typeof value === 'undefined') {
+            continue;
         }
+        field.value = formCash[field.name];
     }
 }, false);

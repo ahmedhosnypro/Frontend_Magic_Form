@@ -1,17 +1,6 @@
-body {
-    font-family: McLaren sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-flow: column;
-    padding: 0;
-    margin: 0;
-    background: #383838;
-}
-
 header {
     margin: 0;
-    background: #212529;
+    background: #1b1b1b;
     width: 100%;
     min-height: 3em;
     display: flex;
@@ -36,11 +25,10 @@ header nav a {
     text-decoration: none;
     color: white;
     border: 1px solid transparent;
-    padding: 0.5em;
+    padding: 0.2em 0.4em;
 }
 
 header nav a:hover {
-    background: #383838;
-    border: 1px solid #383838;
-    border-radius: 10px;
+    background: #925e10;
+    border-radius: 0.5em;
 }

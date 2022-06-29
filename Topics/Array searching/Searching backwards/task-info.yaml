@@ -1,0 +1,13 @@
+type: code
+files:
+- name: main.js
+  visible: true
+  text: "const results = [3, 5, 2, 1, 2, 3, 4, 6, 1, 5];\n\nfunction search(element)\
+    \ {\n// Write your code here  \n}"
+  learner_created: false
+feedback_link: https://hyperskill.org/learn/step/18274#comment
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: Tue, 28 Jun 2022 20:46:02 UTC
+record: -1

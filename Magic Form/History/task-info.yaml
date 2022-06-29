@@ -425,7 +425,16 @@ files:
         }
     }, false);
   learner_created: true
-- name: src/style/style.css
+- name: src/history.html
+  visible: true
+  learner_created: true
+- name: src/script/history.js
+  visible: true
+  learner_created: true
+- name: src/style/history.css
+  visible: true
+  learner_created: true
+- name: src/style/form.css
   visible: true
   text: |+
     main {
@@ -493,6 +502,12 @@ files:
     }
 
   learner_created: true
+- name: src/style/main.css
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/learn/step/18642#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Congratulations!
+  time: Wed, 29 Jun 2022 05:09:03 UTC
 record: 3

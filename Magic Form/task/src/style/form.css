@@ -1,5 +1,6 @@
 main {
     width: 50%;
+    min-height: 100%;
     display: flex;
     justify-content: center;
 }
@@ -41,24 +42,5 @@ form input:focus {
 
 form input:focus::placeholder{
     color: transparent;
-}
-form button {
-    font-size: 1em;
-    align-self: center;
-    margin: 1em;
-    padding: 0.4em 0.8em;
-    border: 2px solid black;
-    border-radius: 5px;
-    background: black;
-}
-
-form button:hover {
-    font-size: 1em;
-    align-self: center;
-    margin: 1em;
-    padding: 0.4em 0.8em;
-    border: 2px inset black;
-    border-radius: 5px;
-    background: #212529;
 }
 
