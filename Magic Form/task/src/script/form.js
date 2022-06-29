@@ -7,38 +7,67 @@ const inputAddress = document.getElementById('address');
 let submitButton = document.getElementById('submit-button');
 const inputFields = [inputFirstName, inputLastName, inputEmail, inputPhone, inputCompany, inputAddress];
 
-let formInputs = {};
+let data;
 
 submitButton.addEventListener('click', () => {
+    // update submissions' history
+    let allBlank = true;
     for (const field of inputFields) {
-        formInputs[field.name] = field.value;
+        if (field.value !== "") {
+            allBlank = false;
+            break
+        }
     }
-    let submits = JSON.parse(localStorage.getItem('submissions')) || [];
-    submits[submits.length] = formInputs;
-    localStorage.setItem('submissions', JSON.stringify(submits));
 
+    if (allBlank) {
+        return;
+    }
+
+    for (const field of inputFields) {
+        data[field.name] = field.value;
+    }
+
+    let submissions = JSON.parse(localStorage.getItem('submissions')) || [];
+    data['id'] = submissions.length;
+    submissions[submissions.length] = data;
+    localStorage.setItem('submissions', JSON.stringify(submissions));
+
+    // reset form fields, and form cash
     for (const field of inputFields) {
         field.value = "";
     }
     localStorage.setItem('formCash', JSON.stringify({}));
 })
 
+// changing any field handler to update form cash, to save changed in localStorage
 for (const field of inputFields) {
     field.addEventListener('input', () => {
-        let formCash = JSON.parse(localStorage.getItem('formCash')) || {};
-        formCash[field.name] = field.value;
-        localStorage.setItem('formCash', JSON.stringify(formCash));
+        data[field.name] = field.value;
+        localStorage.setItem('formCash', JSON.stringify(data));
     });
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    const formCash = JSON.parse(localStorage.getItem('formCash'));
-
-    for (const field of inputFields) {
-        const value = formCash[field.name];
-        if (typeof value === 'undefined') {
-            continue;
-        }
-        field.value = formCash[field.name];
+    data = JSON.parse(localStorage.getItem('formCash'));
+    if (data != null) {
+        updateFormDate();
+    } else {
+        data = {};
     }
 }, false);
+
+setInterval(() => {
+    const localStorageData = JSON.parse(localStorage.getItem('formCash'));
+    if (localStorageData != null && localStorageData !== data) {
+        data = localStorageData;
+        updateFormDate();
+    }
+}, 100)
+
+function updateFormDate() {
+    for (const field of inputFields) {
+        if (field.name in data) {
+            field.value = data[field.name];
+        }
+    }
+}

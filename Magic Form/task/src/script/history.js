@@ -1,20 +1,21 @@
 const historyContainer = document.getElementById('history-container');
+let submissions;
+let submit = "submit-"
 
+// read submission history and add them to the page
 document.addEventListener('DOMContentLoaded', function () {
-    let submissions = JSON.parse(localStorage.getItem('submissions')) || [];
-    if (submissions.length === 0) {
-        return;
+    submissions = JSON.parse(localStorage.getItem('submissions'));
+    if (submissions != null && submissions.length !== 0) {
+        updateDate();
+    } else {
+        submissions = [];
     }
-
-    submissions.forEach((submission, index) => {
-        createHistory(submission, index);
-    })
 }, false);
 
-function createHistory(submission, id) {
+function createHistory(submission) {
     const cardContainer = document.createElement('div');
     historyContainer.appendChild(cardContainer);
-    cardContainer.id = `submit-${id}`;
+    cardContainer.id = `${submit}${submission.id}`;
     cardContainer.classList.add('submit-history-card');
 
     const firstNameLabel = document.createElement('p');
@@ -77,21 +78,40 @@ function createHistory(submission, id) {
     deleteButton.classList.add('delete-button');
     deleteButton.textContent = "Delete";
     deleteButton.addEventListener('click', () => {
-        deleteSubmit(`submit-${id}`);
+        deleteSubmission(submission.id);
     });
 }
 
-function deleteSubmit(submissionId) {
-    let submissions = JSON.parse(localStorage.getItem('submissions')) || [];
-    if (submissions.length === 0) {
-        return;
+function deleteSubmission(submissionId) {
+    let tempSubmissions = [];
+    for (const submission of submissions) {
+        if (submission.id !== submissionId) {
+            tempSubmissions.push(submission);
+        }
     }
 
-    const id = Number(submissionId.split("submit-")[1]);
-
-    submissions.splice(id, 1);
+    submissions = tempSubmissions;
     localStorage.setItem('submissions', JSON.stringify(submissions));
 
-    const element = document.getElementById(submissionId);
+    const element = document.getElementById(`${submit}${submissionId}`);
     element.parentNode.removeChild(element);
 }
+
+function updateDate() {
+    submissions.forEach((submission) => {
+        createHistory(submission);
+    })
+}
+
+setInterval(() => {
+    const localStorageSubmissions = JSON.parse(localStorage.getItem('submissions'));
+    if (localStorageSubmissions != null
+        && localStorageSubmissions.length !== 0
+        && JSON.stringify(localStorageSubmissions) !== JSON.stringify(submissions)) {
+        while (historyContainer.firstChild) {
+            historyContainer.removeChild(historyContainer.firstChild);
+        }
+        submissions = localStorageSubmissions;
+        updateDate();
+    }
+}, 100)

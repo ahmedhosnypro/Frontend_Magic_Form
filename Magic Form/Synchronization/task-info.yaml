@@ -407,6 +407,352 @@ files:
         }
     ).timeout(30000);
   learner_created: false
+- name: src/style/header.css
+  visible: true
+  text: |-
+    header {
+        margin: 0;
+        background: #1b1b1b;
+        width: 100%;
+        min-height: 3em;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    header nav {
+        min-width: 50%;
+        max-width: 50%;
+        min-height: 3em;
+
+        display: flex;
+        flex-flow: row;
+        justify-content: flex-start;
+        align-items: center;
+        flex-basis: border-box;
+    }
+
+    header nav a {
+        margin: 0 1em 0  0;
+        text-decoration: none;
+        color: white;
+        border: 1px solid transparent;
+        padding: 0.2em 0.4em;
+    }
+
+    header nav a:hover {
+        background: #925e10;
+        border-radius: 0.5em;
+    }
+  learner_created: true
+- name: src/script/form.js
+  visible: true
+  text: |-
+    const inputFirstName = document.getElementById('first-name');
+    const inputLastName = document.getElementById('last-name');
+    const inputEmail = document.getElementById('email');
+    const inputPhone = document.getElementById('phone');
+    const inputCompany = document.getElementById('company');
+    const inputAddress = document.getElementById('address');
+    let submitButton = document.getElementById('submit-button');
+    const inputFields = [inputFirstName, inputLastName, inputEmail, inputPhone, inputCompany, inputAddress];
+
+    let formInputs = {};
+
+    submitButton.addEventListener('click', () => {
+        for (const field of inputFields) {
+            formInputs[field.name] = field.value;
+        }
+        let submits = JSON.parse(localStorage.getItem('submissions')) || [];
+        submits[submits.length] = formInputs;
+        localStorage.setItem('submissions', JSON.stringify(submits));
+
+        for (const field of inputFields) {
+            field.value = "";
+        }
+        localStorage.setItem('formCash', JSON.stringify({}));
+    })
+
+    for (const field of inputFields) {
+        field.addEventListener('input', () => {
+            let formCash = JSON.parse(localStorage.getItem('formCash')) || {};
+            formCash[field.name] = field.value;
+            localStorage.setItem('formCash', JSON.stringify(formCash));
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const formCash = JSON.parse(localStorage.getItem('formCash'));
+
+        for (const field of inputFields) {
+            const value = formCash[field.name];
+            if (typeof value === 'undefined') {
+                continue;
+            }
+            field.value = formCash[field.name];
+        }
+    }, false);
+  learner_created: true
+- name: src/history.html
+  visible: true
+  text: |-
+    <!doctype html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Magic Form</title>
+        <link rel="stylesheet" href="style/main.css">
+        <link rel="stylesheet" href="style/header.css">
+        <link rel="stylesheet" href="style/history.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=McLaren&display=swap" rel="stylesheet">
+    </head>
+    <body>
+    <header>
+        <nav>
+            <a href="index.html" id="form-link">Form</a>
+            <a href="history.html" id="history-link">History</a>
+        </nav>
+    </header>
+    <div id="history-container">
+    </div>
+    <script src="script/history.js"></script>
+    </body>
+    </html>
+  learner_created: true
+- name: src/style/form.css
+  visible: true
+  text: |+
+    main {
+        width: 50%;
+        min-height: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    form {
+        min-width: 100%;
+        max-width: 100%;
+
+        margin: 0;
+        padding: 0;
+
+        display: flex;
+        flex-flow: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+
+    form label {
+        margin: 1em 0 0.5em 0.3em;
+        width: 100%;
+    }
+
+    form input {
+        display: block;
+        outline: none;
+        width: 100%;
+        height: 2em;
+        padding: 0.5em;
+        border: 1px solid black;
+        border-radius: 5px;
+        background: transparent;
+    }
+
+    form input:focus {
+        border: 1px solid #212529;
+        border-radius: 5px;
+        background: transparent;
+    }
+
+    form input:focus::placeholder{
+        color: transparent;
+    }
+
+  learner_created: true
+- name: src/style/history.css
+  visible: true
+  text: |-
+    #history-container {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    p {
+        color: white;
+    }
+
+    .submit-history-card {
+        margin: 1em 0;
+        padding-left: 0.5em;
+
+        display: flex;
+        flex-flow: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+
+        border: 1px solid #e28739;
+        border-radius: 0.5em;
+    }
+
+    .submit-history-card p {
+        margin: 0.5em 0 0.2em 0.3em;
+    }
+
+    .submit-history-card .card-data {
+        min-height: 1em;
+        height: 1em;
+        min-width: 90%;
+        width: 90%;
+        margin: 0 0 0.5em 0.6em;
+        padding: 0.2em;
+        font-size: 0.8em;
+    }
+  learner_created: true
+- name: src/script/history.js
+  visible: true
+  text: |-
+    const historyContainer = document.getElementById('history-container');
+
+    document.addEventListener('DOMContentLoaded', function () {
+        let submissions = JSON.parse(localStorage.getItem('submissions')) || [];
+        if (submissions.length === 0) {
+            return;
+        }
+
+        submissions.forEach((submission, index) => {
+            createHistory(submission, index);
+        })
+    }, false);
+
+    function createHistory(submission, id) {
+        const cardContainer = document.createElement('div');
+        historyContainer.appendChild(cardContainer);
+        cardContainer.id = `submit-${id}`;
+        cardContainer.classList.add('submit-history-card');
+
+        const firstNameLabel = document.createElement('p');
+        cardContainer.appendChild(firstNameLabel);
+        firstNameLabel.textContent = "First Name";
+
+        const cardFirstName = document.createElement('p');
+        cardContainer.appendChild(cardFirstName);
+        cardFirstName.classList.add('card-first-name', 'card-data');
+        cardFirstName.textContent = submission['first-name'];
+
+
+        const lastNameLabel = document.createElement('p');
+        cardContainer.appendChild(lastNameLabel);
+        lastNameLabel.textContent = "Last Name";
+
+        const cardLastName = document.createElement('p');
+        cardContainer.appendChild(cardLastName);
+        cardLastName.classList.add('card-last-name', 'card-data');
+        cardLastName.textContent = submission['last-name'];
+
+        const emailLabel = document.createElement('p');
+        cardContainer.appendChild(emailLabel);
+        emailLabel.textContent = "Email";
+
+        const cardEmail = document.createElement('p');
+        cardContainer.appendChild(cardEmail);
+        cardEmail.classList.add('card-email', 'card-data');
+        cardEmail.textContent = submission['email'];
+
+        const phoneLabel = document.createElement('p');
+        cardContainer.appendChild(phoneLabel);
+        phoneLabel.textContent = "Phone";
+
+        const cardPhone = document.createElement('p');
+        cardContainer.appendChild(cardPhone);
+        cardPhone.classList.add('card-phone', 'card-data');
+        cardPhone.textContent = submission['phone'];
+
+        const companyLabel = document.createElement('p');
+        cardContainer.appendChild(companyLabel);
+        companyLabel.textContent = "Company";
+
+        const cardCompany = document.createElement('p');
+        cardContainer.appendChild(cardCompany);
+        cardCompany.classList.add('card-company', 'card-data');
+        cardCompany.textContent = submission['company'];
+
+        const addressLabel = document.createElement('p');
+        cardContainer.appendChild(addressLabel);
+        addressLabel.textContent = "Address";
+
+        const cardAddress = document.createElement('p');
+        cardContainer.appendChild(cardAddress);
+        cardAddress.classList.add('card-address', 'card-data');
+        cardAddress.textContent = submission['address'];
+
+        const deleteButton = document.createElement('button');
+        cardContainer.appendChild(deleteButton);
+        deleteButton.classList.add('delete-button');
+        deleteButton.textContent = "Delete";
+        deleteButton.addEventListener('click', () => {
+            deleteSubmit(`submit-${id}`);
+        });
+    }
+
+    function deleteSubmit(submissionId) {
+        let submissions = JSON.parse(localStorage.getItem('submissions')) || [];
+        if (submissions.length === 0) {
+            return;
+        }
+
+        const id = Number(submissionId.split("submit-")[1]);
+
+        submissions.splice(id, 1);
+        localStorage.setItem('submissions', JSON.stringify(submissions));
+
+        const element = document.getElementById(submissionId);
+        element.parentNode.removeChild(element);
+    }
+  learner_created: true
+- name: src/style/main.css
+  visible: true
+  text: |-
+    body {
+        font-family: McLaren sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-flow: column;
+        padding: 0;
+        margin: 0;
+        background: #212121;
+    }
+
+    button:hover {
+        font-size: 1em;
+        align-self: center;
+        margin-bottom: 0.3em;
+        padding: 0.4em 0.8em;
+        border: 2px solid #925e10;
+        border-radius: 5px;
+        background: #121212;
+    }
+
+    button {
+        font-size: 1em;
+        align-self: center;
+        margin-top:  0.5em;
+        margin-bottom: 0.3em;
+        padding: 0.4em 0.8em;
+        border: 2px solid #1b1b1b;
+        border-radius: 5px;
+        background: #121212;
+    }
+  learner_created: true
 feedback_link: https://hyperskill.org/learn/step/18643#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Well done! You've finished the project. Select a new project on <a href="https://hyperskill.org/projects">JetBrains
+    Academy</a> to continue learning.
+  time: Wed, 29 Jun 2022 07:20:51 UTC
 record: -1
